@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦊 Forwy: aprende qué es un forward</title>
+<style>
+  * { box-sizing: border-box; font-family: "Comic Sans MS", "Trebuchet MS", sans-serif; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #ffe29a 0%, #ffa6c9 50%, #a6e1ff 100%);
+    padding: 16px;
+  }
+  .app {
+    width: 100%; max-width: 520px; background: #fff; border-radius: 24px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.18); overflow: hidden; display: flex; flex-direction: column;
+    height: 80vh; max-height: 720px;
+  }
+  header {
+    background: #ff7eb3; color: #fff; padding: 16px 20px; display: flex; align-items: center; gap: 12px;
+  }
+  header .avatar { font-size: 40px; }
+  header h1 { font-size: 20px; margin: 0; }
+  header p { margin: 2px 0 0; font-size: 13px; opacity: .9; }
+  .chat {
+    flex: 1; padding: 18px; overflow-y: auto; background: #fff7fb; display: flex; flex-direction: column; gap: 12px;
+  }
+  .bubble {
+    max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.45; white-space: pre-line;
+    animation: pop .25s ease;
+  }
+  .bot { align-self: flex-start; background: #fff; border: 2px solid #ffd1e3; border-bottom-left-radius: 4px; color: #333; }
+  .user { align-self: flex-end; background: #7ec8ff; color: #073; border-bottom-right-radius: 4px; color:#024; }
+  @keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .menu { padding: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #fff; border-top: 2px solid #ffe1ee; }
+  .menu button {
+    padding: 12px; border: none; border-radius: 14px; font-size: 14px; cursor: pointer; color: #fff;
+    transition: transform .08s; font-weight: bold;
+  }
+  .menu button:active { transform: scale(.95); }
+  .b1 { background: #ff9f68; } .b2 { background: #6ec6a8; }
+  .b3 { background: #ff85a1; } .b4 { background: #8a8ff0; }
+  .b5 { background: #b0b0b0; grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="avatar">🦊</div>
+    <div>
+      <h1>Forwy, el zorrito del dinero</h1>
+      <p>Te explico qué es un forward y por qué protege</p>
+    </div>
+  </header>
+  <div class="chat" id="chat"></div>
+  <div class="menu">
+    <button class="b1" onclick="responder('1','¿Qué es un forward?')">1) ¿Qué es un forward?</button>
+    <button class="b2" onclick="responder('2','¿Qué es una cobertura?')">2) ¿Qué es una cobertura?</button>
+    <button class="b3" onclick="responder('3','Ejemplo con helados 🍦')">3) Ejemplo con helados 🍦</button>
+    <button class="b4" onclick="responder('4','¿Por qué lo usan las empresas?')">4) ¿Por qué las empresas?</button>
+    <button class="b5" onclick="responder('5','Adiós 👋')">5) Adiós 👋</button>
+  </div>
+</div>
+
+<script>
+const GUION = {
+  "1": "Un forward es una PROMESA. 🤝\n\nImagina que hoy haces un trato con un amigo: «El próximo mes te compro tu figura de dinosaurio, y desde YA acordamos el precio: 3 monedas.»\n\nPase lo que pase, el próximo mes la cambias por 3 monedas. ¡Aunque todos la quieran y suba a 10, tú pagas 3, porque lo prometieron antes!\n\nEso es un forward: un trato HOY para intercambiar algo DESPUÉS, a un precio fijado desde ahora. ⏰",
+  "2": "Cobertura es una palabra elegante para decir PROTECCIÓN. 🛡️\n\nEs como llevar paraguas ☔ cuando no sabes si lloverá, o ponerte casco 🪖 para montar bici. ¡No es que quieras caerte... es para estar seguro por si acaso!\n\nUn forward te protege de que un precio cambie de golpe. Ya sabes HOY cuánto pagarás mañana, así que ninguna sorpresa te hace daño. 😎",
+  "3": "¡Vamos con helados! 🍦\n\nHoy un helado cuesta 1 moneda. Pero quieres comprar uno el próximo mes... y te da miedo que suba a 2. 😱\n\nHaces un trato con el heladero: «Te prometo comprarte un helado el próximo mes, y tú me lo vendes a 1 moneda.» 🤝\n\nEl próximo mes:\n• Si subió a 2 monedas → ¡pagas solo 1! Ganaste 🎉\n• Si bajó, pagas 1, pero estuviste TRANQUILO todo el mes.\n\nEsa promesa es un forward, y te sirvió de COBERTURA: te protegió del susto del precio. 🛡️",
+  "4": "Las empresas grandes hacen lo mismo, ¡pero con DÓLARES en vez de helados! 💵\n\nUna empresa sabe que el próximo año recibirá muchos dólares, pero no sabe cuánto valdrán en pesos. 🤔\n\nPara no llevarse un susto, hace un forward: deja fijado HOY a qué precio cambiará esos dólares. Así planea tranquila, suba o baje el dólar.\n\n¡Es la misma promesa del helado, pero en grande! 🏢"
+};
+const DESPEDIDA = "¡Lo hiciste genial! 🌟\n\nAhora ya sabes que un forward es una PROMESA de precio para el futuro, y que sirve de COBERTURA porque te PROTEGE de las sorpresas.\n\n¡Hasta pronto! 🦊👋";
+
+const chat = document.getElementById('chat');
+
+function burbuja(texto, quien) {
+  const b = document.createElement('div');
+  b.className = 'bubble ' + quien;
+  b.textContent = texto;
+  chat.appendChild(b);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function responder(opcion, etiquetaUsuario) {
+  burbuja(etiquetaUsuario, 'user');
+  const texto = opcion === '5' ? DESPEDIDA : GUION[opcion];
+  setTimeout(() => burbuja(texto, 'bot'), 350);
+}
+
+// Mensaje de bienvenida al abrir
+burbuja("🦊 ¡Hola! Soy Forwy, el zorrito del dinero. Te voy a enseñar un truco que usan los grandes para no llevarse sorpresas con los precios. Toca un botón de abajo para empezar 👇", 'bot');
+</script>
+</body>
+</html>
