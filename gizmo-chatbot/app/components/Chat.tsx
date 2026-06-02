@@ -37,7 +37,10 @@ export default function Chat() {
     { role: "assistant", content: WELCOME_MESSAGE },
   ]);
   const [input, setInput] = useState("");
+  // loading: muestra la burbuja "pensando" (solo para la respuesta de Gizmo).
   const [loading, setLoading] = useState(false);
+  // suggesting: genera las preguntas sugeridas en silencio (sin burbuja).
+  const [suggesting, setSuggesting] = useState(false);
   // Las 3 preguntas sugeridas: arrancan estáticas y luego las genera la IA.
   const [suggestions, setSuggestions] = useState<string[]>(STARTER_QUESTIONS);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -46,9 +49,11 @@ export default function Chat() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
 
+  const busy = loading || suggesting;
+
   async function send(text: string) {
     const clean = text.trim();
-    if (!clean || loading) return;
+    if (!clean || busy) return;
 
     const next: ChatMessage[] = [...messages, { role: "user", content: clean }];
     setMessages(next);
@@ -58,11 +63,15 @@ export default function Chat() {
       const reply = await askGizmo(next);
       const withReply: ChatMessage[] = [...next, { role: "assistant", content: reply }];
       setMessages(withReply);
-      // La IA propone 3 preguntas nuevas según lo último que se habló.
+      // Apenas responde Gizmo, ocultamos la burbuja de pensamiento...
+      setLoading(false);
+      // ...y generamos las sugerencias en silencio (sin burbuja).
+      setSuggesting(true);
       const nuevas = await suggestQuestions(withReply);
       setSuggestions(nuevas);
     } finally {
       setLoading(false);
+      setSuggesting(false);
     }
   }
 
@@ -124,7 +133,7 @@ export default function Chat() {
           <button
             key={`${i}-${q}`}
             onClick={() => send(q)}
-            disabled={loading}
+            disabled={busy}
             className="rounded-full border-2 border-neon-cyan/70 px-3 py-1.5 text-sm font-bold text-neon-cyan transition hover:bg-neon-cyan hover:text-ink hover:shadow-neon-cyan disabled:opacity-40"
           >
             {q}
@@ -148,7 +157,7 @@ export default function Chat() {
         />
         <button
           type="submit"
-          disabled={loading || !input.trim()}
+          disabled={busy || !input.trim()}
           aria-label="Enviar"
           className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-neon-pink to-neon-purple text-white shadow-neon-pink transition hover:brightness-125 disabled:opacity-40"
         >
