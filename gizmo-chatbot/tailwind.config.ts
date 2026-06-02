@@ -5,26 +5,26 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Bases oscuras (violeta profundo)
-        ink: "#160a33",
-        grape: "#1f1147",
-        plum: "#2c1a63",
-        // Acentos neón
+        // Bases oscuras (azul-verde profundo / teal-navy)
+        ink: "#05161B",
+        grape: "#08232C",
+        plum: "#0E3540",
+        // Acentos neón: mezcla verde + azul
         neon: {
-          cyan: "#2DE2E6",
-          pink: "#FF2E97",
-          purple: "#9D4EDD",
-          lime: "#B8FF3C",
+          cyan: "#35D6FF", // cian-azul
+          pink: "#1FD9A0", // verde-agua (acento principal)
+          purple: "#1C8FE0", // azul eléctrico (cierre de degradado / glow)
+          lime: "#36F0A8", // verde-aqua
         },
-        cream: "#FFE9C7",
+        cream: "#FFE7C2",
       },
       fontFamily: {
         rounded: ['"Baloo 2"', '"Comic Sans MS"', "system-ui", "sans-serif"],
       },
       boxShadow: {
-        "neon-pink": "0 0 24px rgba(255,46,151,0.45)",
-        "neon-cyan": "0 0 24px rgba(45,226,230,0.45)",
-        "neon-purple": "0 0 50px rgba(157,78,221,0.40)",
+        "neon-pink": "0 0 10px rgba(31,217,160,0.30)",
+        "neon-cyan": "0 0 10px rgba(53,214,255,0.28)",
+        "neon-purple": "0 0 55px rgba(28,143,224,0.40)",
       },
     },
   },

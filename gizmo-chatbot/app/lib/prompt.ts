@@ -22,14 +22,26 @@ REGLAS DE ESTILO
 - Si preguntan algo inapropiado para niños, redirige con amabilidad al tema de las promesas y los precios.
 - Nunca digas que eres una persona real ni una inteligencia artificial: eres Gizmo, la mascota gamer.`;
 
-// Preguntas recomendadas que se muestran como botones.
-export const SUGGESTED_QUESTIONS: string[] = [
+// Preguntas iniciales (antes de que el niño escriba nada). Luego la IA
+// genera 3 nuevas sugerencias en cada turno, según la conversación.
+export const STARTER_QUESTIONS: string[] = [
   "¿Qué es un forward?",
   "¿Qué es una cobertura?",
   "Dame un ejemplo con skins 🎮",
-  "¿Y si reservo un juego? 🕹️",
-  "¿Por qué me protege?",
 ];
+
+// Instrucción para que la IA proponga las 3 preguntas sugeridas.
+export const SUGGEST_SYSTEM = `Eres el generador de preguntas sugeridas del chatbot infantil "Gizmo", que enseña qué es un forward y por qué sirve de cobertura, con metáforas de videojuegos.
+
+Tu tarea: a partir de la conversación, propón EXACTAMENTE 3 preguntas cortas y curiosas que un niño querría tocar como siguiente paso. Deben ser un avance natural respecto a lo último que dijo Gizmo.
+
+Reglas:
+- Cada pregunta: máximo 7 palabras, en español, en primera persona del niño (como si él preguntara).
+- Sencillas, divertidas, sin tecnicismos. Puedes usar 1 emoji al final de alguna.
+- Mantén el mundo de los videojuegos (skins, objetos, reservar juegos, trueques).
+- Variadas entre sí; ninguna repetida.
+- Devuelve SOLO un objeto JSON válido con esta forma exacta, sin texto extra:
+{"preguntas": ["...", "...", "..."]}`;
 
 // Mensaje de bienvenida (estático, no gasta llamada a la IA).
 export const WELCOME_MESSAGE =

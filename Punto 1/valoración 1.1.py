@@ -2,32 +2,28 @@
 Punto 1 - Valoracion (MTM) de forwards USD/COP al 31/12/2024.
 Metodologia: Anexo 1 de la prueba tecnica (Skandia).
 
-Estructura en funciones reutilizables para que el Punto 4 (archivo plano .txt)
-pueda reusar cargar_datos() y valorar_todos() sin cambios.
+Lee el Excel original desde la carpeta "Datos" (en la raiz del proyecto) y
+escribe el Excel de revision en esta misma carpeta ("Punto 1").
 """
 
 from pathlib import Path
 import pandas as pd
 
-# --- Rutas del proyecto (este script vive en <raiz>/Herramientas/) ---
-# Se calculan a partir de la ubicacion del propio archivo, asi el script
-# funciona sin importar desde que carpeta se ejecute.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# --- Rutas (este script vive en <raiz>/Punto 1/) ---
+SCRIPT_DIR = Path(__file__).resolve().parent      # carpeta "Punto 1"
+BASE_DIR = SCRIPT_DIR.parent                       # raiz del proyecto
 DATOS_DIR = BASE_DIR / "Datos"
-ENTREGABLES_DIR = BASE_DIR / "Entregables"
 
 # --- Parametros del enunciado (fuente: PRUEBA TECNICA + Superfinanciera) ---
 FECHA_VALORACION = pd.Timestamp(2024, 12, 31)
-TRM = 4409.15          # COP/USD oficial del 31/12/2024
-# Excel original en la carpeta Datos, ignorando temporales ~$ de Excel.
+TRM = 4409.15  # COP/USD oficial del 31/12/2024
 ARCHIVO = next(p for p in DATOS_DIR.glob("*.xlsx") if not p.name.startswith("~$"))
+SALIDA = SCRIPT_DIR / "valoración 1.1.xlsx"
 
 
 def cargar_datos(archivo):
-    """Lee las tres hojas. Las fechas YYYYMMDD se leen como TEXTO y luego se
-    convierten a fecha real (asi no se pierde informacion ni ceros)."""
+    """Lee las tres hojas. Fechas YYYYMMDD como TEXTO y luego a fecha real."""
     base = pd.read_excel(archivo, sheet_name="base datos", dtype=str)
-
     base["f_celebracion"] = pd.to_datetime(base["Fecha celebración contrato"], format="%Y%m%d")
     base["f_vencimiento"] = pd.to_datetime(base["Fecha vencimiento contrato"], format="%Y%m%d")
     base["Nominal"] = pd.to_numeric(base["Nominal"])
@@ -35,13 +31,12 @@ def cargar_datos(archivo):
 
     pf = pd.read_excel(archivo, sheet_name="Puntos fwd")
     td = pd.read_excel(archivo, sheet_name="tasa descuento")
-    pf.columns = ["dias", "puntos_fwd"]   # ojo: el encabezado real trae un espacio
+    pf.columns = ["dias", "puntos_fwd"]
     td.columns = ["dias", "tasa"]
     return base, pf, td
 
 
 def construir_buscadores(pf, td):
-    """Convierte las tablas en diccionarios {dia: valor} para match exacto."""
     puntos_por_dia = dict(zip(pf["dias"], pf["puntos_fwd"]))
     tasa_por_dia = dict(zip(td["dias"], td["tasa"]))
     return puntos_por_dia, tasa_por_dia
@@ -54,7 +49,6 @@ def buscar(diccionario, dias, nombre):
 
 
 def valorar_contrato(fila, puntos_por_dia, tasa_por_dia):
-    """Valora un unico contrato y devuelve d, puntos, r, factor, Derecho, Obligacion, MTM."""
     d = (fila["f_vencimiento"] - FECHA_VALORACION).days
     puntos = buscar(puntos_por_dia, d, "puntos fwd")
     r = buscar(tasa_por_dia, d, "tasa")
@@ -85,8 +79,7 @@ def valorar_todos(base, pf, td):
     return pd.concat([base, calculos], axis=1)
 
 
-def exportar_revision(df, salida=ENTREGABLES_DIR / "Punto1_Valoracion_revision.xlsx"):
-    ENTREGABLES_DIR.mkdir(exist_ok=True)
+def exportar_revision(df, salida=SALIDA):
     cols = [
         "Número de contrato", "Empresa", "Finalidad de la operación", "Posicion",
         "Nombre de la contraparte", "Nominal", "Strike",

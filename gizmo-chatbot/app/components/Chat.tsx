@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { askGizmo, type ChatMessage } from "../actions";
-import { SUGGESTED_QUESTIONS, WELCOME_MESSAGE } from "../lib/prompt";
+import { askGizmo, suggestQuestions, type ChatMessage } from "../actions";
+import { STARTER_QUESTIONS, WELCOME_MESSAGE } from "../lib/prompt";
 import GizmoMascot from "./GizmoMascot";
 
 // Resalta las palabras clave "forward" y "cobertura".
@@ -14,7 +14,7 @@ function Highlight({ text }: { text: string }) {
         const low = part.toLowerCase();
         if (low === "forward" || low === "forwards") {
           return (
-            <span key={i} className="font-extrabold text-neon-pink">
+            <span key={i} className="font-extrabold text-neon-lime">
               {part}
             </span>
           );
@@ -38,6 +38,8 @@ export default function Chat() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  // Las 3 preguntas sugeridas: arrancan estáticas y luego las genera la IA.
+  const [suggestions, setSuggestions] = useState<string[]>(STARTER_QUESTIONS);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -54,22 +56,30 @@ export default function Chat() {
     setLoading(true);
     try {
       const reply = await askGizmo(next);
-      setMessages((m) => [...m, { role: "assistant", content: reply }]);
+      const withReply: ChatMessage[] = [...next, { role: "assistant", content: reply }];
+      setMessages(withReply);
+      // La IA propone 3 preguntas nuevas según lo último que se habló.
+      const nuevas = await suggestQuestions(withReply);
+      setSuggestions(nuevas);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="flex h-[88vh] max-h-[760px] w-full max-w-2xl flex-col overflow-hidden rounded-[28px] bg-grape shadow-neon-purple ring-1 ring-neon-purple/40">
+    <div className="flex h-[90vh] max-h-[840px] w-full max-w-3xl flex-col overflow-hidden rounded-[28px] bg-grape shadow-neon-purple ring-1 ring-neon-purple/40">
       {/* Encabezado */}
-      <header className="flex items-center gap-3 bg-gradient-to-r from-neon-purple via-neon-pink to-neon-purple px-5 py-4 text-white">
-        <div className="grid h-14 w-14 place-items-center rounded-full bg-ink/40 ring-2 ring-white/30">
+      <header className="flex items-center gap-3 bg-gradient-to-r from-[#0a2c36] via-[#0f4753] to-[#0c3358] px-5 py-4">
+        <div className="grid h-14 w-14 place-items-center rounded-full bg-ink/50 ring-2 ring-[#35D6FF]/40">
           <GizmoMascot size={50} />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold leading-none drop-shadow">Gizmo</h1>
-          <p className="text-sm text-white/90">Trucos geniales con los precios</p>
+          <h1 className="text-[26px] font-extrabold leading-none text-white [text-shadow:0_0_10px_#35D6FF,0_0_22px_#36F0A8]">
+            Gizmo
+          </h1>
+          <p className="text-sm font-semibold text-[#8af0e0] [text-shadow:0_0_8px_#35D6FF]">
+            Trucos geniales con los precios
+          </p>
         </div>
       </header>
 
@@ -108,11 +118,11 @@ export default function Chat() {
         )}
       </div>
 
-      {/* Preguntas recomendadas */}
+      {/* Preguntas sugeridas por la IA (3, cambian según la conversación) */}
       <div className="flex flex-wrap gap-2 border-t border-white/10 bg-grape px-4 pt-3">
-        {SUGGESTED_QUESTIONS.map((q) => (
+        {suggestions.map((q, i) => (
           <button
-            key={q}
+            key={`${i}-${q}`}
             onClick={() => send(q)}
             disabled={loading}
             className="rounded-full border-2 border-neon-cyan/70 px-3 py-1.5 text-sm font-bold text-neon-cyan transition hover:bg-neon-cyan hover:text-ink hover:shadow-neon-cyan disabled:opacity-40"

@@ -1,6 +1,6 @@
 "use server";
 
-import { SYSTEM_PROMPT } from "./lib/prompt";
+import { SYSTEM_PROMPT, SUGGEST_SYSTEM, STARTER_QUESTIONS } from "./lib/prompt";
 
 export type ChatMessage = {
   role: "user" | "assistant";
@@ -58,5 +58,63 @@ export async function askGizmo(history: ChatMessage[]): Promise<string> {
   } catch (err) {
     console.error("askGizmo failed:", err);
     return "¡Ay! Se cayó la conexión ahora mismo 📡. Inténtalo de nuevo en un momento.";
+  }
+}
+
+/**
+ * Server Action: genera 3 preguntas sugeridas con la IA, según la conversación
+ * (en especial lo último que respondió Gizmo). Devuelve siempre 3 strings;
+ * ante cualquier fallo, cae a las preguntas iniciales.
+ */
+export async function suggestQuestions(history: ChatMessage[]): Promise<string[]> {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) return STARTER_QUESTIONS;
+
+  const recent = history.slice(-8);
+
+  try {
+    const res = await fetch(OPENROUTER_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": process.env.OPENROUTER_SITE_URL ?? "http://localhost:3000",
+        "X-Title": process.env.OPENROUTER_SITE_NAME ?? "Gizmo Chatbot",
+      },
+      body: JSON.stringify({
+        model: process.env.OPENROUTER_MODEL ?? "openai/gpt-4o-mini",
+        temperature: 0.9,
+        max_tokens: 150,
+        messages: [
+          { role: "system", content: SUGGEST_SYSTEM },
+          ...recent,
+          { role: "user", content: "Genera ahora las 3 preguntas sugeridas en el JSON pedido." },
+        ],
+      }),
+      cache: "no-store",
+    });
+
+    if (!res.ok) return STARTER_QUESTIONS;
+
+    const data = await res.json();
+    const raw: string = data?.choices?.[0]?.message?.content ?? "";
+
+    // Extrae el JSON aunque venga con texto/```json alrededor.
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (match) {
+      const parsed = JSON.parse(match[0]);
+      const list = parsed?.preguntas;
+      if (Array.isArray(list)) {
+        const clean = list
+          .map((q) => String(q).trim())
+          .filter(Boolean)
+          .slice(0, 3);
+        if (clean.length === 3) return clean;
+      }
+    }
+    return STARTER_QUESTIONS;
+  } catch (err) {
+    console.error("suggestQuestions failed:", err);
+    return STARTER_QUESTIONS;
   }
 }
