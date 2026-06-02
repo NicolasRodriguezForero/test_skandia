@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Claude Code (configuración local)
+.claude/
+
+# Carpeta de trabajo de la presentación (no se versiona)
+Presentación/
+
+# Temporales de Office/Excel
+~$*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
