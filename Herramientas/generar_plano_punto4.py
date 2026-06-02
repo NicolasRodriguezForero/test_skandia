@@ -20,10 +20,10 @@ Decisiones de formato (acordadas):
   - Fecha: DDMMYYYY
 """
 
-from valoracion_punto1 import cargar_datos, valorar_todos, ARCHIVO
+from valoracion_punto1 import cargar_datos, valorar_todos, ARCHIVO, ENTREGABLES_DIR
 
 SEP = ";"
-SALIDA = "Punto4_archivo_plano.txt"
+SALIDA = ENTREGABLES_DIR / "Punto4_archivo_plano.txt"
 
 
 def finalidad_a_codigo(valor):
@@ -51,6 +51,7 @@ def formatear_fila(fila):
 
 
 def generar_plano(salida=SALIDA):
+    ENTREGABLES_DIR.mkdir(exist_ok=True)
     base, pf, td = cargar_datos(ARCHIVO)
     df = valorar_todos(base, pf, td)
     lineas = [formatear_fila(fila) for _, fila in df.iterrows()]

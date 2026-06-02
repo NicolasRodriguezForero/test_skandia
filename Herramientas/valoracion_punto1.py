@@ -6,13 +6,21 @@ Estructura en funciones reutilizables para que el Punto 4 (archivo plano .txt)
 pueda reusar cargar_datos() y valorar_todos() sin cambios.
 """
 
-import glob
+from pathlib import Path
 import pandas as pd
+
+# --- Rutas del proyecto (este script vive en <raiz>/Herramientas/) ---
+# Se calculan a partir de la ubicacion del propio archivo, asi el script
+# funciona sin importar desde que carpeta se ejecute.
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATOS_DIR = BASE_DIR / "Datos"
+ENTREGABLES_DIR = BASE_DIR / "Entregables"
 
 # --- Parametros del enunciado (fuente: PRUEBA TECNICA + Superfinanciera) ---
 FECHA_VALORACION = pd.Timestamp(2024, 12, 31)
 TRM = 4409.15          # COP/USD oficial del 31/12/2024
-ARCHIVO = [x for x in glob.glob("*.xlsx") if not x.startswith("~$")][0]
+# Excel original en la carpeta Datos, ignorando temporales ~$ de Excel.
+ARCHIVO = next(p for p in DATOS_DIR.glob("*.xlsx") if not p.name.startswith("~$"))
 
 
 def cargar_datos(archivo):
@@ -77,7 +85,8 @@ def valorar_todos(base, pf, td):
     return pd.concat([base, calculos], axis=1)
 
 
-def exportar_revision(df, salida="Punto1_Valoracion_revision.xlsx"):
+def exportar_revision(df, salida=ENTREGABLES_DIR / "Punto1_Valoracion_revision.xlsx"):
+    ENTREGABLES_DIR.mkdir(exist_ok=True)
     cols = [
         "Número de contrato", "Empresa", "Finalidad de la operación", "Posicion",
         "Nombre de la contraparte", "Nominal", "Strike",
