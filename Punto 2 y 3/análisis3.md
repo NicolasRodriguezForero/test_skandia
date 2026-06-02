@@ -1,5 +1,6 @@
 # Punto 3 — Calificación de la estrategia del front
 
+**Autor:** Nicolas Rodriguez Forero
 **Rol desde el que se evalúa:** Control y Valoración (middle office), es decir, el área que
 supervisa y valida lo que hace el front office (quienes toman las posiciones).
 

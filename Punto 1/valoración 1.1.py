@@ -2,6 +2,8 @@
 Punto 1 - Valoracion (MTM) de forwards USD/COP al 31/12/2024.
 Metodologia: Anexo 1 de la prueba tecnica (Skandia).
 
+Autor: Nicolas Rodriguez Forero
+
 Lee el Excel original desde la carpeta "Datos" (en la raiz del proyecto) y
 escribe el Excel de revision en esta misma carpeta ("Punto 1").
 """

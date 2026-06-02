@@ -1,6 +1,8 @@
 """
 Punto 4 - Herramienta para generar el archivo plano .txt al corte 31/12/2024.
 
+Autor: Nicolas Rodriguez Forero
+
 Autocontenida: reutiliza la misma metodologia de valoracion del Punto 1, pero
 sin importar otro modulo (cada punto vive en su propia carpeta). Lee el Excel
 original desde "Datos" y escribe "plano.txt" en esta misma carpeta ("Punto 4").

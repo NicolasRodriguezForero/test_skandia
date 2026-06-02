@@ -1,5 +1,6 @@
 # Punto 2 — Análisis de utilidad/pérdida por portafolio
 
+**Autor:** Nicolas Rodriguez Forero
 **Fecha de valoración:** 31 de diciembre de 2024
 **TRM oficial (Superfinanciera):** 4.409,15 COP/USD
 **Fuente de cifras:** valoración del Punto 1 (`Punto1_Valoracion_revision.xlsx`)
