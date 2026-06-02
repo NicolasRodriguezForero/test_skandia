@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🦊 Forwy: aprende qué es un forward</title>
+<title>🐭 Gizmo: aprende qué es un forward</title>
 <style>
   * { box-sizing: border-box; font-family: "Comic Sans MS", "Trebuchet MS", sans-serif; }
   body {
@@ -46,9 +46,9 @@
 <body>
 <div class="app">
   <header>
-    <div class="avatar">🦊</div>
+    <div class="avatar">🐭</div>
     <div>
-      <h1>Forwy, el zorrito del dinero</h1>
+      <h1>Gizmo, tu amigo del dinero</h1>
       <p>Te explico qué es un forward y por qué protege</p>
     </div>
   </header>
@@ -58,7 +58,6 @@
     <button class="b2" onclick="responder('2','¿Qué es una cobertura?')">2) ¿Qué es una cobertura?</button>
     <button class="b3" onclick="responder('3','Ejemplo con helados 🍦')">3) Ejemplo con helados 🍦</button>
     <button class="b4" onclick="responder('4','¿Por qué lo usan las empresas?')">4) ¿Por qué las empresas?</button>
-    <button class="b5" onclick="responder('5','Adiós 👋')">5) Adiós 👋</button>
   </div>
 </div>
 
@@ -69,7 +68,6 @@ const GUION = {
   "3": "¡Vamos con helados! 🍦\n\nHoy un helado cuesta 1 moneda. Pero quieres comprar uno el próximo mes... y te da miedo que suba a 2. 😱\n\nHaces un trato con el heladero: «Te prometo comprarte un helado el próximo mes, y tú me lo vendes a 1 moneda.» 🤝\n\nEl próximo mes:\n• Si subió a 2 monedas → ¡pagas solo 1! Ganaste 🎉\n• Si bajó, pagas 1, pero estuviste TRANQUILO todo el mes.\n\nEsa promesa es un forward, y te sirvió de COBERTURA: te protegió del susto del precio. 🛡️",
   "4": "Las empresas grandes hacen lo mismo, ¡pero con DÓLARES en vez de helados! 💵\n\nUna empresa sabe que el próximo año recibirá muchos dólares, pero no sabe cuánto valdrán en pesos. 🤔\n\nPara no llevarse un susto, hace un forward: deja fijado HOY a qué precio cambiará esos dólares. Así planea tranquila, suba o baje el dólar.\n\n¡Es la misma promesa del helado, pero en grande! 🏢"
 };
-const DESPEDIDA = "¡Lo hiciste genial! 🌟\n\nAhora ya sabes que un forward es una PROMESA de precio para el futuro, y que sirve de COBERTURA porque te PROTEGE de las sorpresas.\n\n¡Hasta pronto! 🦊👋";
 
 const chat = document.getElementById('chat');
 
@@ -83,12 +81,11 @@ function burbuja(texto, quien) {
 
 function responder(opcion, etiquetaUsuario) {
   burbuja(etiquetaUsuario, 'user');
-  const texto = opcion === '5' ? DESPEDIDA : GUION[opcion];
-  setTimeout(() => burbuja(texto, 'bot'), 350);
+  setTimeout(() => burbuja(GUION[opcion], 'bot'), 350);
 }
 
 // Mensaje de bienvenida al abrir
-burbuja("🦊 ¡Hola! Soy Forwy, el zorrito del dinero. Te voy a enseñar un truco que usan los grandes para no llevarse sorpresas con los precios. Toca un botón de abajo para empezar 👇", 'bot');
+burbuja("🐭 ¡Hola! Soy Gizmo, tu amigo del dinero. Te voy a enseñar un truco que usan los grandes para no llevarse sorpresas con los precios. Toca un botón de abajo para empezar 👇", 'bot');
 </script>
 </body>
 </html>

@@ -62,7 +62,7 @@ GUION = {
 }
 
 BIENVENIDA = (
-    "\n\U0001F98A ¡Hola! Soy Forwy, el zorrito del dinero.\n"
+    "\n\U0001F42D ¡Hola! Soy Gizmo, tu amigo del dinero.\n"
     "Te voy a ensenar un truco que usan los grandes para no llevarse\n"
     "sorpresas con los precios. ¿Que quieres saber?\n"
 )
@@ -81,7 +81,7 @@ MENU = (
 DESPEDIDA = (
     "\n\U0001F31F ¡Lo hiciste genial! Ahora ya sabes que un forward es una\n"
     "PROMESA de precio para el futuro, y que sirve de COBERTURA porque te\n"
-    "PROTEGE de las sorpresas. ¡Hasta pronto! \U0001F98A\U0001F44B\n"
+    "PROTEGE de las sorpresas. ¡Hasta pronto! \U0001F42D\U0001F44B\n"
 )
 
 
@@ -94,7 +94,7 @@ def main():
             break
         respuesta = GUION.get(opcion)
         if respuesta:
-            print("\n\U0001F98A Forwy dice:\n" + respuesta)
+            print("\n\U0001F42D Gizmo dice:\n" + respuesta)
         else:
             print("\nMmm, no entendi. \U0001F914 Elige un numero del 1 al 5, ¡porfa!")
 
