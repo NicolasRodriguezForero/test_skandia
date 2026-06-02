@@ -7,6 +7,15 @@ eligen por un menu. Asi el contenido es siempre correcto y apropiado para ninos,
 y funciona sin internet.
 """
 
+import sys
+
+# La consola de Windows usa cp1252 por defecto y no soporta emojis.
+# Forzamos UTF-8 para que el texto y los emojis se impriman sin error.
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
 GUION = {
     "1": (
         "Un forward es una PROMESA. \U0001F91D\n"
