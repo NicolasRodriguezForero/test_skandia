@@ -6,9 +6,12 @@
 body {
   font-family: "Baloo 2", "Comic Sans MS", system-ui, sans-serif;
   background:
-    radial-gradient(1200px 600px at 50% -10%, #ffe7c2 0%, transparent 60%),
-    linear-gradient(135deg, #cdeee5 0%, #8ED1C0 45%, #6ab7c9 100%);
+    radial-gradient(820px 420px at 12% 8%, rgba(45, 226, 230, 0.20), transparent 60%),
+    radial-gradient(820px 420px at 88% 94%, rgba(255, 46, 151, 0.20), transparent 60%),
+    radial-gradient(620px 620px at 50% 50%, rgba(157, 78, 221, 0.18), transparent 70%),
+    linear-gradient(160deg, #1f1147 0%, #160a33 60%, #1a0f3f 100%);
   background-attachment: fixed;
+  color: #f3eafe;
 }
 
 /* Puntitos del indicador "escribiendo..." */
@@ -16,8 +19,9 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 9999px;
-  background-color: #8ED1C0;
+  background-color: #2de2e6;
   display: inline-block;
+  box-shadow: 0 0 10px rgba(45, 226, 230, 0.8);
   animation: dotPulse 1s infinite ease-in-out;
 }
 @keyframes dotPulse {

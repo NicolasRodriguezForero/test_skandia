@@ -18,7 +18,7 @@ export async function askGizmo(history: ChatMessage[]): Promise<string> {
   const apiKey = process.env.OPENROUTER_API_KEY;
 
   if (!apiKey) {
-    return "¡Uy! Mi cofre está cerrado con llave 🔒. (Falta configurar OPENROUTER_API_KEY en el servidor.)";
+    return "¡Uy! Se me desconectó el mando 🎮🔌. (Falta configurar OPENROUTER_API_KEY en el servidor.)";
   }
 
   // Solo conservamos los últimos turnos para no gastar de más.
@@ -45,7 +45,7 @@ export async function askGizmo(history: ChatMessage[]): Promise<string> {
     if (!res.ok) {
       const detail = await res.text().catch(() => "");
       console.error("OpenRouter error:", res.status, detail);
-      return "¡Ups! El cofre se trabó un momentito 🧰. ¿Puedes intentarlo otra vez?";
+      return "¡Ups! Se me trabó un momentito el juego 🕹️. ¿Puedes intentarlo otra vez?";
     }
 
     const data = await res.json();
@@ -57,6 +57,6 @@ export async function askGizmo(history: ChatMessage[]): Promise<string> {
     );
   } catch (err) {
     console.error("askGizmo failed:", err);
-    return "¡Ay! No pude abrir el cofre ahora mismo 🗝️. Inténtalo de nuevo en un momento.";
+    return "¡Ay! Se cayó la conexión ahora mismo 📡. Inténtalo de nuevo en un momento.";
   }
 }
